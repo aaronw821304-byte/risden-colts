@@ -1,8 +1,9 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
 <!doctype html>
-<html lang="en-GB">
+<html lang="en-GB" data-theme="dark" style="color-scheme:dark">
 <head>
 <meta charset="utf-8">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#0B1220">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Risden Wood U16 Colts</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -190,6 +191,12 @@ textarea.share{min-height:260px; font-size:.95rem; line-height:1.5}
 .prow.phead{padding-top:8px; padding-bottom:0; font-size:.78rem; color:var(--muted)}
 .prow.phead span:not(.nm){width:108px; text-align:center}
 @media (max-width:420px){ .prow{flex-wrap:wrap} .prow .nm{flex-basis:100%} .prow.phead .nm{display:none} .prow.phead{justify-content:flex-end} }
+/* goals/assists columns: values sit under their headings */
+.prow .stepper{flex:none; width:108px; justify-content:center}
+.prow .stepper+.stepper{margin-left:0}
+@media (max-width:420px){ .prow .nm+.stepper{margin-left:auto} }
+:is(body.ro,#static) .prow .stepper, :is(body.ro,#static) .prow.phead span:not(.nm){width:76px}
+@media (max-width:420px){ :is(body.ro,#static) .prow{flex-wrap:nowrap} :is(body.ro,#static) .prow .nm{flex-basis:auto} :is(body.ro,#static) .prow.phead .nm{display:block} :is(body.ro,#static) .prow .nm+.stepper{margin-left:0} }
 .chip.xi[aria-pressed="true"]{background:var(--pitch); border-color:var(--pitch); color:#fff}
 .chip.xi[aria-pressed="true"] small{color:#cfe0ff}
 .chip.xi.nr:not([aria-pressed="true"]){border-style:dashed}
@@ -304,20 +311,20 @@ td.rate{font-variant-numeric:tabular-nums}
 .smodal .x{cursor:pointer}
 @media (min-width:700px){.smodal{align-items:center}.smodal-card{border-radius:20px}}
 #r-home:checked~#t-home{display:block}
-#r-home:checked~#snav label[for="r-home"]{color:var(--pitch)}
+#r-home:checked~#snav label[for="r-home"]{color:#8fb3ff}
 #r-fixtures:checked~#t-fixtures{display:block}
-#r-fixtures:checked~#snav label[for="r-fixtures"]{color:var(--pitch)}
+#r-fixtures:checked~#snav label[for="r-fixtures"]{color:#8fb3ff}
 #fx-all:checked~.fxv-all{display:block}
 #fx-upcoming:checked~.fxv-upcoming{display:block}
 #fx-results:checked~.fxv-results{display:block}
 #fx-H:checked~.fxv-H{display:block}
 #fx-A:checked~.fxv-A{display:block}
 #r-squad:checked~#t-squad{display:block}
-#r-squad:checked~#snav label[for="r-squad"]{color:var(--pitch)}
+#r-squad:checked~#snav label[for="r-squad"]{color:#8fb3ff}
 #r-stats:checked~#t-stats{display:block}
-#r-stats:checked~#snav label[for="r-stats"]{color:var(--pitch)}
+#r-stats:checked~#snav label[for="r-stats"]{color:#8fb3ff}
 #r-league:checked~#t-league{display:block}
-#r-league:checked~#snav label[for="r-league"]{color:var(--pitch)}
+#r-league:checked~#snav label[for="r-league"]{color:#8fb3ff}
 #mo-tbs-h-bedwell:checked~#md-tbs-h-bedwell{display:flex}
 #mt-tbs-h-bedwell-details:checked~.mtv-tbs-h-bedwell-details{display:block}
 #mt-tbs-h-bedwell-squad:checked~.mtv-tbs-h-bedwell-squad{display:block}
@@ -1841,7 +1848,7 @@ function homeHTML(){
     const miss=[]; if(!(last.appearances||[]).length) miss.push('who played'); if(!last.potm) miss.push('player of the match');
     if(miss.length) todo.push({done:false, t:`Finish the ${esc(last.opponent)} result`, s:`Missing ${miss.join(' and ')}`, a:`data-edit="${esc(last.id)}" data-mt="${(last.appearances||[]).length?'result':'wrap'}"`});
   }
-  const todoHTML=todo.length?`<h2 class="h2">This week</h2><div class="todo">${todo.map(x=>`<button class="todo-i ${x.done?'done':''}" ${x.a}><span class="tick" aria-hidden="true">${x.done?'✓':''}</span><span class="tx"><b>${x.t}</b><span>${x.s}</span></span>${x.cta?`<span class="cta">${x.cta}</span>`:''}</button>`).join('')}</div>`:'';
+  const todoHTML=todo.length&&!state.snap?`<h2 class="h2">This week</h2><div class="todo">${todo.map(x=>`<button class="todo-i ${x.done?'done':''}" ${x.a}><span class="tick" aria-hidden="true">${x.done?'✓':''}</span><span class="tx"><b>${x.t}</b><span>${x.s}</span></span>${x.cta?`<span class="cta">${x.cta}</span>`:''}</button>`).join('')}</div>`:'';
   const lastHTML=last?`<h2 class="h2">Last result</h2><div class="list">${resultRow(last)}</div><button class="btn wa" style="margin-top:8px" data-share="${esc(last.id)}">Write the parents’ result message</button>`:'';
   return `${heroHTML()}${todoHTML}${lastHTML}<h2 class="h2">Season</h2>${miniRecordHTML()}`;
 }
@@ -2521,5 +2528,3 @@ async function snapshotTable(){
 </script>
 </body>
 </html>
-
-</body></html>
